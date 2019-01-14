@@ -10,21 +10,20 @@ import (
 
 func addData(tw *timewheel.TimeWheel) {
 	ti := time.Tick(time.Millisecond * time.Duration(1))
-	key := 0
+	uid := 10000
 	for {
 		select {
 		case <-ti:
-			if key == 10000 {
+			if uid == 10010 {
 				return
 			}
 
-			key++
+			uid++
+
 			addtime := time.Now().Format("2006-01-02 15:04:05")
+			key := fmt.Sprintf("timer_key_%d", uid)
 
-			skey := fmt.Sprintf("timer_key_%d", key)
-			tw.AddTimer(time.Second*time.Duration(1), skey, timewheel.TaskData{"key": skey, "uid": key, "addtime": addtime})
-
-			fmt.Println("add to TimeWheel...", key)
+			tw.AddTimer(time.Second*time.Duration(1), key, timewheel.TaskData{"key": key, "uid": uid, "addtime": addtime})
 		}
 	}
 }
